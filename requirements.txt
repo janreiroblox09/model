@@ -5,3 +5,4 @@ numpy
 pandas
 pickle-mixin
 pydantic
+python-dotenv
