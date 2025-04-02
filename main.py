@@ -1,23 +1,31 @@
+import os
 from fastapi import FastAPI
 import pickle
 import numpy as np
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
-# Load the trained Random Forest model
-with open("crop_recommendation_model.pkl", "rb") as model_file:
+# Load the trained Random Forest model using the environment variable for the path
+model_path = os.getenv("MODEL_PATH", "crop_recommendation_model.pkl")
+label_encoder_path = os.getenv("LABEL_ENCODER_PATH", "label_encoder.pkl")
+scaler_path = os.getenv("SCALER_PATH", "scaler.pkl")
+
+with open(model_path, "rb") as model_file:
     model = pickle.load(model_file)
 
 # Load the label encoder
-with open("label_encoder.pkl", "rb") as encoder_file:
+with open(label_encoder_path, "rb") as encoder_file:
     label_encoder = pickle.load(encoder_file)
 
 # Load the scaler
-with open("scaler.pkl", "rb") as scaler_file:
+with open(scaler_path, "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
-# Define input model
 class AveragesData(BaseModel):
     nitrogen: float
     phosphorus: float
